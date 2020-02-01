@@ -13,7 +13,7 @@ import { RegisterComponent } from './login/register.component';
 //rutas
 import { APP_ROUTES } from './app.routes';
 //import { IncrementadorComponent } from './components/incrementador/incrementador.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import { SettingsService } from './services/settings/settings.service';
 
 //modulo de Servicios
@@ -33,9 +33,10 @@ import { ServiceModule } from './services/service.module';
   imports: [
     BrowserModule,
     APP_ROUTES,
-    PagesModule, 
-    ServiceModule,
-    FormsModule
+    PagesModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ServiceModule
   ],
   providers: [],
   bootstrap: [AppComponent]
