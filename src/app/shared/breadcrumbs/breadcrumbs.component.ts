@@ -17,7 +17,7 @@ export class BreadcrumbsComponent implements OnInit {
 
     /**Subscripcion al metodo que obtiene el titulo de las rutas y se la asigna a la variable titulo */
     this.getDataRoute().subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.titulo = data.titulo;
       this.title.setTitle(this.titulo);//permite setear el titulo del navegador 
     });

@@ -3,8 +3,6 @@ import { Usuario } from '../../models/usuario.model';
 import { HttpClient } from "@angular/common/http";
 import { URL_SERVICIOS } from '../../config/config';
 import { map } from 'rxjs/operators';
-//import "rxjs/add/operator/map";
-//import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
@@ -97,15 +95,17 @@ export class UsuarioService {
     //return this.http.put(url, usuario);
     return this.http.put(url, usuario).pipe(
       map((resp: any) => {
-        let usuarioDB: Usuario = resp.body;
-        this.guardarStorage(resp.body._id, this.token, usuarioDB);
+        if (usuario._id === this.usuario._id) {
+          let usuarioDB: Usuario = resp.body;
+          this.guardarStorage(resp.body._id, this.token, usuarioDB);          
+        }
 
         Swal.fire(
           'Usuario Actualizado!',
           usuario.nombre,
           'success'
-        )
-
+        );
+        
         return true;
       })
     )
@@ -117,7 +117,6 @@ export class UsuarioService {
     this._subirArchivoService.subirArchivo(archivo, 'usuarios', id)
       .then(
         (resp: any) => {
-
           this.usuario.img = resp.usuario.img;
           Swal.fire(
             'Imagen Actualizada!',
@@ -129,6 +128,33 @@ export class UsuarioService {
       .catch(resp => {
         console.log('catch', resp);
       })
+  }
+
+  cargarUsuarios(desde: number = 0) {
+    let url = URL_SERVICIOS + '/usuario?desde=' + desde;
+    return this.http.get(url);
+  }
+
+  buscarUsuarios(terminoBusqueda: string) {
+    let url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + terminoBusqueda;
+    return this.http.get(url).pipe(
+      map((resp: any) => resp.usuarios)
+    );
+  }
+
+  borrarUsuario(id: string) {
+    let url = URL_SERVICIOS + '/usuario/' + id;
+    url += '?token=' + this.token;
+    return this.http.delete(url).pipe(
+      map(resp => {
+        Swal.fire(
+          'Eliminado exitosamente!',
+          'El usuario ha sido elimado',
+          'success'
+        );
+        return true;
+      })
+    );
   }
 
 
